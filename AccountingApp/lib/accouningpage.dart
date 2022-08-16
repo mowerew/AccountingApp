@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:accountingapp/transactions_list.dart';
 import 'package:accountingapp/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,17 @@ class AccountingPage extends StatefulWidget {
 }
 
 class _AccountingPageState extends State<AccountingPage> {
+  //final List<TransactionsList> transactionsList = [];
+
+  final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
   List<User> user = [User(name: 'Mohammad', userName: 'mohammad')];
   GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 29, 28, 28),
       key: _key,
       drawer: Drawer(),
       body: SafeArea(
@@ -44,6 +51,7 @@ class _AccountingPageState extends State<AccountingPage> {
                           _key.currentState!.openDrawer();
                         },
                         icon: Icon(Icons.menu),
+                        color: Color.fromARGB(255, 230, 192, 80),
                         iconSize: MediaQuery.of(context).size.height * 0.04,
                       ),
                     ),
@@ -80,7 +88,8 @@ class _AccountingPageState extends State<AccountingPage> {
                                   (e) => Text(
                                     e.name,
                                     style: TextStyle(
-                                        color: Color.fromARGB(255, 31, 29, 29),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                         fontSize:
                                             MediaQuery.of(context).size.height *
                                                 0.04,
@@ -99,20 +108,11 @@ class _AccountingPageState extends State<AccountingPage> {
                               fontWeight: FontWeight.w300),
                         )
                       ],
-                      //children: user.map((e) => Text(e.name),Text('data'),).toList(),
-
-                      // Text(
-                      //   "Welcome Back!",
-                      //   style: TextStyle(
-                      //       color: Colors.grey,
-                      //       fontSize: 26,
-                      //       fontWeight: FontWeight.w300),
-                      // )
                     ),
                     Container(
                       child: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: Color.fromARGB(255, 143, 27, 163),
+                        color: Color.fromARGB(255, 230, 192, 80),
                         size: MediaQuery.of(context).size.height * 0.05,
                       ),
                     ),
@@ -176,6 +176,7 @@ class _AccountingPageState extends State<AccountingPage> {
                                                         .height *
                                                     0.01),
                                             child: TextFormField(
+                                              controller: priceController,
                                               style: TextStyle(
                                                   fontSize:
                                                       MediaQuery.of(context)
@@ -198,6 +199,7 @@ class _AccountingPageState extends State<AccountingPage> {
                                                         .height *
                                                     0.01),
                                             child: TextFormField(
+                                              controller: descriptionController,
                                               style: TextStyle(
                                                   fontSize:
                                                       MediaQuery.of(context)
@@ -214,7 +216,27 @@ class _AccountingPageState extends State<AccountingPage> {
                                             ),
                                           ),
                                           ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              @override
+                                              void initState() {
+                                                transactionsList.add(
+                                                  TransactionsList(
+                                                    type: "Income",
+                                                    price: int.parse(
+                                                        priceController.text),
+                                                    time: DateTime.now(),
+                                                    name: descriptionController
+                                                        .text,
+                                                    icon:
+                                                        Icon(Icons.card_travel),
+                                                  ),
+                                                );
+                                                super.initState();
+                                              }
+
+                                              setState(() {});
+                                              print("ok");
+                                            },
                                             child: Text(
                                               "Submit",
                                               style: TextStyle(
@@ -360,6 +382,7 @@ class _AccountingPageState extends State<AccountingPage> {
                 ),
               ),
               Divider(
+                color: Color.fromARGB(255, 230, 192, 80),
                 height: MediaQuery.of(context).size.height * 0.02,
                 indent: MediaQuery.of(context).size.width * 0.08,
                 endIndent: MediaQuery.of(context).size.width * 0.08,
@@ -386,6 +409,7 @@ class _AccountingPageState extends State<AccountingPage> {
                         Text(
                           "1,500,000 Rials",
                           style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
                             fontSize: MediaQuery.of(context).size.height * 0.03,
                             fontWeight: FontWeight.bold,
                           ),
@@ -413,7 +437,7 @@ class _AccountingPageState extends State<AccountingPage> {
                   itemBuilder: (context, index) => Container(
                     width: MediaQuery.of(context).size.width * 0.7,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 255, 212, 82),
+                      color: Color.fromARGB(255, 230, 192, 80),
                       borderRadius: BorderRadius.circular(
                         MediaQuery.of(context).size.height * 0.02,
                       ),
@@ -442,11 +466,11 @@ class _AccountingPageState extends State<AccountingPage> {
                               Text(
                                 "Shopping",
                                 style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      0.025,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.purple[600],
-                                ),
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.025,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 253, 253, 253)),
                               ),
                               Text(
                                 "300,000 Rials",
@@ -468,6 +492,9 @@ class _AccountingPageState extends State<AccountingPage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
               Expanded(
                 flex: 3,
                 //height: MediaQuery.of(context).size.height * 0.24,
@@ -480,12 +507,13 @@ class _AccountingPageState extends State<AccountingPage> {
                     onTap: () {},
                     leading: Icon(
                       FontAwesomeIcons.gift,
+                      color: Color.fromARGB(255, 230, 192, 80),
                       size: MediaQuery.of(context).size.height * 0.04,
                     ),
                     title: Text(
                       "Grocery",
                       style: TextStyle(
-                        color: Color.fromARGB(255, 15, 15, 15),
+                        color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: MediaQuery.of(context).size.height * 0.022,
                         fontWeight: FontWeight.bold,
                       ),
@@ -500,7 +528,7 @@ class _AccountingPageState extends State<AccountingPage> {
                     trailing: Text(
                       "4500000 Rials",
                       style: TextStyle(
-                        color: Color.fromARGB(255, 15, 15, 15),
+                        color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: MediaQuery.of(context).size.height * 0.018,
                         fontWeight: FontWeight.w500,
                       ),
